@@ -1,0 +1,25 @@
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;    
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 3em;
+}
+
+.radio {
+    background-color: purple;
+    color: white;
+    width: 40vw;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1.5em;
+}
+
+button[type="submit"], button[type="button"] {
+    margin-top: 30px;
+}
