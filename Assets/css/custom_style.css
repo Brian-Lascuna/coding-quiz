@@ -29,3 +29,8 @@ button[type="submit"], button[type="button"] {
     top: 0;
     right: 50px;
 }
+
+.result {
+    text-align: center;
+    font-size: 3em;
+}

@@ -5,12 +5,16 @@ var solution1 = document.querySelector(".solution1");
 var solution2 = document.querySelector(".solution2");
 var solution3 = document.querySelector(".solution3");
 var solution4 = document.querySelector(".solution4");
+var allSolutions = document.getElementsByName("optionsRadios")
+var nextBtn = document.querySelector(".next-button");
 var quizTime = document.querySelector(".quizTime");
+var result = document.querySelector(".result");
 var gameState = false;
 var count = 120;
+var questionNumber = 0;
 
 var questionList = [question1, question2, question3, question4, question5];
-var answerKey = ["solution3", "solution3", "solution4", "solution1", "solution2"];
+var answerKey = ["option3", "option3", "option4", "option1", "option2"];
 
 function question1() {
     startBtn.setAttribute("style", "display: none");
@@ -61,13 +65,52 @@ function question5() {
     solution4.textContent = "for loops";
 }
 
+function displayResult(outcome) {
+    if (outcome) {
+        result.textContent = "Correct!";
+        result.setAttribute("style", "visibility: visible");
+    }
+    else {
+        result.textContent = "Incorrect!";
+        result.setAttribute("style", "visibility: visible");
+    }
+}
+
 function startQuiz() {
-    if (!gameState) {
+    if (!gameState || count <= 0) {
         return
     }
 
-    var questionNumber = 0;
     questionList[questionNumber]();
+
+    quizDisplay.addEventListener("submit", function(event) {
+        event.preventDefault();
+        for (var i = 0; i < allSolutions.length; i++) {
+            if (allSolutions[i].checked == true) {
+                if (allSolutions[i].value == answerKey[questionNumber]) {
+                    displayResult(true);
+                }
+                else {
+                    displayResult(false);
+                }
+                nextBtn.disabled = false;
+            }
+        }
+    })
+
+    nextBtn.addEventListener("click", function() {
+        questionNumber += 1;
+        nextBtn.disabled = true;
+
+        for (var i = 0; i < allSolutions.length; i++) {
+            if (allSolutions[i].checked) {
+                allSolutions[i].checked = false;
+            }
+        }
+
+        result.setAttribute("style", "visibility: hidden");
+        startQuiz();
+    })
 }
 
 startBtn.addEventListener("click", function() {
