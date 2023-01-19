@@ -9,9 +9,10 @@ var allSolutions = document.getElementsByName("optionsRadios")
 var nextBtn = document.querySelector(".next-button");
 var quizTime = document.querySelector(".quizTime");
 var result = document.querySelector(".result");
+var score = document.querySelector(".score");
 var gameState = false;
-var count = 120;
-var questionNumber = 0;
+var count = 100;
+var questionNumber = -1;
 
 var questionList = [question1, question2, question3, question4, question5];
 var answerKey = ["option3", "option3", "option4", "option1", "option2"];
@@ -76,15 +77,8 @@ function displayResult(outcome) {
     }
 }
 
-function startQuiz() {
-    if (!gameState || count <= 0) {
-        return
-    }
-
-    questionList[questionNumber]();
-
-    quizDisplay.addEventListener("submit", function(event) {
-        event.preventDefault();
+function quizSubmit(event) {
+    event.preventDefault();
         for (var i = 0; i < allSolutions.length; i++) {
             if (allSolutions[i].checked == true) {
                 if (allSolutions[i].value == answerKey[questionNumber]) {
@@ -92,14 +86,50 @@ function startQuiz() {
                 }
                 else {
                     displayResult(false);
+                    count -= 20;
                 }
                 nextBtn.disabled = false;
             }
         }
-    })
+}
+
+function countdown() {
+    var quizTimeInterval = setInterval(function() {
+        if (count > 0) {
+            quizTime.textContent = "Timer: " + count;
+            count--;
+        }
+        else {
+            quizTime.textContent = "Timer: 0";
+            clearInterval(quizTimeInterval);
+            endScreen();
+        }
+    }, 1000)
+}
+
+function endScreen() {
+    question.textContent = "All done!";
+    score.textContent = "Your score is: " + count;
+    score.setAttribute("style", "display: visible");
+    quizDisplay.setAttribute("style", "display: none");
+}
+
+function startQuiz() {
+    questionNumber += 1;
+    console.log(questionNumber);
+    if (questionNumber > (questionList.length - 1)) {
+        gameState = false
+    }
+
+    if (!gameState) {
+        endScreen();
+    }
+
+    questionList[questionNumber]();
+
+    quizDisplay.addEventListener("submit", quizSubmit)
 
     nextBtn.addEventListener("click", function() {
-        questionNumber += 1;
         nextBtn.disabled = true;
 
         for (var i = 0; i < allSolutions.length; i++) {
@@ -109,11 +139,15 @@ function startQuiz() {
         }
 
         result.setAttribute("style", "visibility: hidden");
+
+        quizDisplay.removeEventListener("click", quizSubmit)
+
         startQuiz();
     })
 }
 
 startBtn.addEventListener("click", function() {
     gameState = true;
+    countdown();
     startQuiz();
 });
