@@ -38,9 +38,22 @@
             <div class="solution4"></div>
           </label>
         </div>
-        <button type="submit" class="btn btn-info btn-lg">Submit</button>
+        <button type="submit" class="btn btn-info btn-lg submit-button">Submit</button>
         <button type="button" class="btn btn-info btn-lg next-button" disabled>Next</button> 
       </form>
+
+      <form style="display: none" class="form-inline score-submit">
+        <label for="inlineFormInputName2">Enter initials: </label>
+        <input type="text" class="form-control mb-2 mr-sm-2 user-initials" id="inlineFormInputName2" placeholder="Initials" maxlength="2" pattern="[a-zA-Z]+" oninput="this.value = this.value.toUpperCase()" onfocus="this.value=''">
+    
+        <button type="submit" class="btn btn-primary mb-2 score-submit-btn">Submit</button>
+      </form>
+
+      <ul style="display: none" class="score-list"></ul>
+      <section style="display: none" class="btn-container">
+        <button type="button" class="btn btn-info btn-lg retry-button">Retry</button>
+        <button type="button" class="btn btn-info btn-lg clear-button">Clear High Scores</button>
+      </section>
     </main>
 
     <h3 style="display: none" class="quizTime">Timer: 100</h3>

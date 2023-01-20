@@ -20,7 +20,7 @@ h1 {
     font-size: 1.5em;
 }
 
-button[type="submit"], button[type="button"] {
+.submit-button, button[type="button"] {
     margin-top: 30px;
 }
 
@@ -33,4 +33,40 @@ button[type="submit"], button[type="button"] {
 .result {
     text-align: center;
     font-size: 3em;
+}
+
+.score-submit {
+    margin-top: 30px;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-container button {
+    margin: 0 30px;
+}
+
+.score-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-left: 0;
+    border-top: 3px solid black;
+    margin-top: 20px;
+    width: 80vw;
+    text-align: center;
+}
+
+.score-list li {
+    list-style: none;
+    margin: 10px 0;
+    width: 100%;
+    background-color: purple;
+    color: white;
+    border-radius: 5px;
+    font-size: 2em;
 }
