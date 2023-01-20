@@ -1,3 +1,4 @@
+// Grab all necessary elements for quiz game
 var startBtn = document.querySelector(".start-button");
 var quizDisplay = document.querySelector(".quiz-display");
 var question = document.querySelector(".question");
@@ -19,19 +20,18 @@ var btnContainer = document.querySelector(".btn-container");
 var retryBtn = document.querySelector(".retry-button");
 var clearBtn = document.querySelector(".clear-button");
 
+// Initialize necessary variables such as time and game state
 var count = 100;
 var quizTimeInterval;
-var userScore = {
-    user: "",
-    score: ""
-};
-var userHighScores = [userScore];
+var userHighScores = [];
 var gameState = false;
 var questionNumber = -1;
 
+// Questions are loaded into an array with the correct answer loaded into another array with corresponding indices
 var questionList = [question1, question2, question3, question4, question5];
 var answerKey = ["option3", "option3", "option4", "option1", "option2"];
 
+// Functions for the various questions
 function question1() {
     startBtn.setAttribute("style", "display: none");
     quizDisplay.setAttribute("style", "display: visible");
@@ -80,6 +80,7 @@ function question5() {
     solution4.textContent = "for loops";
 }
 
+// Displays the result of the current question after being answered
 function displayResult(outcome) {
     if (outcome) {
         result.textContent = "Correct!";
@@ -91,6 +92,7 @@ function displayResult(outcome) {
     }
 }
 
+// Determines whether the selected answer is correct, deducts 20 seconds if incorrect
 function quizSubmit(event) {
     event.preventDefault();
         for (var i = 0; i < allSolutions.length; i++) {
@@ -108,6 +110,7 @@ function quizSubmit(event) {
         }
 }
 
+// Proceeds to next question upon clicking the "Next" button
 function nextQuestion() {
     nextBtn.disabled = true;
 
@@ -126,6 +129,7 @@ function nextQuestion() {
         startQuiz();
 }
 
+// Starts a countdown using setInterval
 function startCountdown() {
     count = 100;
     quizTime.setAttribute("style", "display: visible");
@@ -145,6 +149,7 @@ function countdown() {
     }
 }
 
+// Displays the user score and prompts user for their initials to save their score
 function endScreen() {
     clearInterval(quizTimeInterval);
     quizTime.setAttribute("style", "display: none")
@@ -157,19 +162,23 @@ function endScreen() {
     scoreSubmit.addEventListener("submit", saveScore);
 }
 
+// Saves the user's score into local storage
 function saveScore(event) {
     event.preventDefault();
-    userScore.user = userInitials.value;
-    userScore.score = count;
+    var userScore = {
+        user: userInitials.value,
+        score: count
+    };
 
-    console.log(userInitials.value);
-    userInitials.value = "";
     userHighScores.push(userScore);
+    console.log(userHighScores);
     localStorage.setItem("high-scores", JSON.stringify(userHighScores));
+    userInitials.value = "";
     scoreSubmit.removeEventListener("submit", saveScore);
     renderScores();
 }
 
+// Renders the user's score alongside other existing scores read from local storage
 function renderScores() {
     question.textContent = "High Scores";
     score.setAttribute("style", "display: none");
@@ -190,6 +199,7 @@ function renderScores() {
     clearBtn.addEventListener("click", clearScores);
 }
 
+// Re-initializes the game state and resets the quiz to its beginning state
 function resetQuiz() {
     question.textContent = "Coding Quiz";
     scoreList.setAttribute("style", "display: none");
@@ -201,6 +211,7 @@ function resetQuiz() {
     questionNumber = -1;
 }
 
+// Clears the local storage and array of scores
 function clearScores() {
     var warning = confirm("Are you sure?");
     if (warning) {
@@ -210,6 +221,7 @@ function clearScores() {
     }
 }
 
+// Loads any existing high scores upon loading the page
 function init() {
     var storedUserScores = JSON.parse(localStorage.getItem("high-scores"));
     if (storedUserScores !== null) {
@@ -218,6 +230,7 @@ function init() {
     }
 }
 
+// Main function for the quiz game
 function startQuiz() {
     questionNumber += 1;
     console.log(questionNumber);
@@ -225,7 +238,11 @@ function startQuiz() {
         gameState = false
     }
 
-    if (!gameState) {
+    if (!gameState && count < 0) {
+        count = 0;
+        endScreen();
+    }
+    else if (!gameState) {
         endScreen();
     }
     else {
